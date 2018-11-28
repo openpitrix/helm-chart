@@ -1,0 +1,52 @@
+dist: xenial
+sudo: required
+env: PATH=/home/travis/.cargo/bin:$PATH
+services:
+- docker
+language: rust
+rust: nightly
+addons:
+  apt:
+    sources:
+    - sourceline: deb http://ppa.launchpad.net/longsleep/golang-backports/ubuntu xenial
+        main
+      key_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF6BC817356A3D45E
+    packages:
+    - docker-ce
+    - golang-go
+    - socat
+before_install:
+- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl
+  && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+- curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.2/minikube-linux-amd64
+  && chmod +x minikube && sudo mv minikube /usr/local/bin/
+- sudo minikube start --vm-driver=none --kubernetes-version=v1.10.0
+- sudo minikube update-context
+- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}';
+  until sudo kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True";
+  do sleep 1; done
+- DESIRED_VERSION=2.9.1 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get
+  | DESIRED_VERSION=v2.9.1 bash
+- sudo helm init --tiller-image=gcr.io/kubernetes-helm/tiller:v2.9.1 --upgrade
+- sudo kubectl create serviceaccount --namespace kube-system tiller
+- sudo kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin
+  --serviceaccount=kube-system:tiller
+- sudo kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+- until sudo helm list -a; do sleep 1; done
+install:
+- "./scripts/install-handlebars-renderer.sh"
+before_script:
+- "./scripts/render-and-deploy-helm-chart.sh"
+script:
+- travis_wait 20 ./scripts/test-openpitrix.sh
+before_deploy:
+- tar zcvf openpitrix-$TRAVIS_TAG.tar.gz openpitrix
+deploy:
+  provider: releases
+  api_key:
+    secure: erOuTuCURqUjik2q7UeCtUiCbdFGmaVZqE2S14ChMIqG4BB6gslFJpHiMQh4KFRC0hJq1gY/GoNl4pNF2kth+em0NB4ffD+FVqHrRLYymrd8vP3QMcUi0siMkCq/AlK4B1F06nY/BtK9OST8BdKnU176vOyPSVj7aFQnW4tGWj6Xsr9MGse0gkJ2o7QZAzLPXfKPWpfeQp0l8kBnFMWu80OBRC7DaIYsMxHLNgTLevFEP+RqpZCP6m70EXMMgs3ctjqiyANk4c90H4MERNVfc8HKYRSeC7Pgkn3Y3CW7GDNf6pPjrcTJE8J3GXbq0opIz0k5zgzZ01CFOuTSx9KuxcSd4mnu+hiZi7sodK7hUFUHPenKdvQB/QvFrNzrhpIygVYq4c524C1JlJjCy1/i44rKW4KXNaHH8M+xGw8l3X7ljvs19897I/7vTqBGwT78E+hfkpAaj0IoZlRMHjJKaUr15s/3oXrtU99a6KWeUOGNhK7IXY0Z9FQBJdcxjjqZWsx3IMYDv8HF41Zu3SXGiMgULShCqiFH/MlBZ+wq+svAdqDpxaimSwQaJwk6qLerqI65WZCtXTL5cmwrsB0dAB/72Sis6KcR0Q5X7qB7qzDswXsE/3VaoPauBylUyYlzehm3s/nbJl53MoRBP0S6BLvpUuPuW9H189N9m1u9coE=
+  file:
+  - deploy/openpitrix-$TRAVIS_TAG.tar.gz
+  on:
+    repo: openpitrix/helm-chart
+    tags: true
