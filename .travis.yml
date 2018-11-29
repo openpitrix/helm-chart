@@ -15,6 +15,7 @@ addons:
     - docker-ce
     - golang-go
     - socat
+    - tree
 before_install:
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl
   && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
@@ -42,11 +43,12 @@ script:
 before_deploy:
 - tar zcvf openpitrix-$TRAVIS_TAG.tar.gz openpitrix
 deploy:
+  overwrite: true
   provider: releases
   api_key:
-    secure: erOuTuCURqUjik2q7UeCtUiCbdFGmaVZqE2S14ChMIqG4BB6gslFJpHiMQh4KFRC0hJq1gY/GoNl4pNF2kth+em0NB4ffD+FVqHrRLYymrd8vP3QMcUi0siMkCq/AlK4B1F06nY/BtK9OST8BdKnU176vOyPSVj7aFQnW4tGWj6Xsr9MGse0gkJ2o7QZAzLPXfKPWpfeQp0l8kBnFMWu80OBRC7DaIYsMxHLNgTLevFEP+RqpZCP6m70EXMMgs3ctjqiyANk4c90H4MERNVfc8HKYRSeC7Pgkn3Y3CW7GDNf6pPjrcTJE8J3GXbq0opIz0k5zgzZ01CFOuTSx9KuxcSd4mnu+hiZi7sodK7hUFUHPenKdvQB/QvFrNzrhpIygVYq4c524C1JlJjCy1/i44rKW4KXNaHH8M+xGw8l3X7ljvs19897I/7vTqBGwT78E+hfkpAaj0IoZlRMHjJKaUr15s/3oXrtU99a6KWeUOGNhK7IXY0Z9FQBJdcxjjqZWsx3IMYDv8HF41Zu3SXGiMgULShCqiFH/MlBZ+wq+svAdqDpxaimSwQaJwk6qLerqI65WZCtXTL5cmwrsB0dAB/72Sis6KcR0Q5X7qB7qzDswXsE/3VaoPauBylUyYlzehm3s/nbJl53MoRBP0S6BLvpUuPuW9H189N9m1u9coE=
-  file:
-  - deploy/openpitrix-$TRAVIS_TAG.tar.gz
+    secure: AOYTxcKQtJBBZGhvIuPS1I8T5E+zWTTWMevUSxemshBF6IOjfJo6dXT4TgnVTUj9nrD5a1/2kEpVewW09h1QwilAbhzxS05Z65UooIL+Ee1D46FDlT/68qZOcnb9Q5SBcidAeRxyoy+cNgi82S6MQs+rjwTQ3Kz6Qn4cGIsvRBdYAK8yMGH7HtWYrHUT66j400VzcQxlhTSCfDFChAzFveEBkCRHL5kGIYj5NEofw5inr0AXbY3PrQxCfQVz7hgtiuCgvp/XhSs8bkJek5s8HrS3quCHVSqZBRaSQ/+yLrar31Ni8VcOPFbyFlJhoLc9ZWtOyQRNwG9sPXUDLEyGKpNHis0qSwOFyqXl5TX9dkONWVHNg4l6tPikE+rWa2nLtT13ho/BxofU8MF+UlyCE9839Kzky+IhLyK+7Ca5L3JCXczyyqIVt64FBzBcomhxxb3BGwYyYvUelEkwk4hShfbOOV9JNq1oYiNXIg0j2IcEmUKd8nT3OTk5GAK7a4DvLph8WIv+Tq879fvbtoNkxPQVuvuUtHwnfqbLiU8OQQkfuaEbcEd3EVGR6voOtwkwmOzS4qAohb79/xV/vjX4vCk++yd3RO/PN7W2h1fmN+UJ8711sqzajJD2yNHETK/CTsC0woZmokmmgOWAi0SbAeMEbYyfOz27AWRAmvmpuBA=
+  file: openpitrix-$TRAVIS_TAG.tar.gz
+  skip_cleanup: true
   on:
     repo: openpitrix/helm-chart
     tags: true
