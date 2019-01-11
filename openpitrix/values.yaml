@@ -11,6 +11,8 @@ openpitrix_log_level: info
 
 grpc_show_error_cause: true
 
+market_replica: 1
+
 ingress:
   enabled: true
 
