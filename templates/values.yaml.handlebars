@@ -3,6 +3,7 @@ version: {{version}}
 
 image: openpitrix/openpitrix:{{version}}
 flyway_image: openpitrix/openpitrix:flyway{{#if (seq version "latest")}}{{else}}-{{version}}{{/if}}
+iam2_image: openpitrix/iam:v0.2.8-dev
 dashboard_image: openpitrix/dashboard:latest
 watcher_image: openpitrix/watcher:latest
 
