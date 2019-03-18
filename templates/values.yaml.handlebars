@@ -3,7 +3,6 @@ version: {{version}}
 
 image: openpitrix/openpitrix:{{version}}
 flyway_image: openpitrix/openpitrix:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
-iam2_image: openpitrix/iam:v0.2.8-dev
 dashboard_image: openpitrix/dashboard:latest
 watcher_image: openpitrix/watcher:latest
 
@@ -29,12 +28,22 @@ memory_requests: 100
 cpu_limits: 500
 memory_limits: 500
 
-mysql_password: password
+etcd:
+  host: openpitrix-etcd
+  service_port: 2379
+  backend_port: 2379
+
+mysql:
+  host: openpitrix-db
+  password: password
+  service_port: 3306
+  backend_port: 3306
 
 iam_secret_key: lrsX5vk03JLNRBI9TnwOPZSNrxFIqvrxajs95MjZSmdsYCEYCPjSI4cLPjG2yT2jQLhKAOHS3lpwr4VyJwZz3ryCluIVb9Smsgq
 iam_client_id: JYGJTveVcmuAvV95iNUnKHgQ
 iam_client_secret: E3SVNXrZOWvsQ2eyrvs9u4nV
 iam_account: HYcida4bFrMP
+iam_init_account_email: admin@op.com
 
 
 global_config:
@@ -44,6 +53,26 @@ global_config:
   frontgate_auto_delete: true
   frontgate_auto_update: true
   max_repo_events: 20
+
+
+notification:
+  version: {{version}}
+  image: openpitrix/notification:{{version}}
+  flyway_image: openpitrix/notification:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
+
+
+im:
+  version: {{version}}
+  image: kubespheredev/im:{{version}}
+  flyway_image: kubespheredev/im:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
+  db_log_mode_enable: true
+
+
+am:
+  version: {{version}}
+  image: openpitrix/iam:{{version}}
+  flyway_image: openpitrix/iam:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
+  db_log_mode_enable: true
 
 
 openpitrix_ca_crt: |-

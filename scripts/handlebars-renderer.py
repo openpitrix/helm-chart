@@ -17,9 +17,6 @@ def render(input_file, value_file, output_file):
     with open(value_file) as valueF:
         values = json.load(valueF)
 
-    print(source)
-    print(values)
-
     compiler = Compiler()
     template = compiler.compile(source)
     output = template(values, helpers={"eq": eq})

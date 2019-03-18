@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openpitrix-db
+  name: {{ .Values.mysql.host }}
   labels:
     app: openpitrix
     tier: db
@@ -13,8 +13,8 @@ spec:
   ports:
   - name: tcp
     protocol: TCP
-    port: 3306
-    targetPort: 3306
+    port: {{ .Values.mysql.service_port }}
+    targetPort: {{ .Values.mysql.backend_port }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -75,7 +75,7 @@ spec:
         - name: MYSQL_ROOT_HOST
           value: "%"
         ports:
-        - containerPort: 3306
+        - containerPort: {{ .Values.mysql.backend_port }}
           name: mysql
         volumeMounts:
         - name: db-persistent-storage

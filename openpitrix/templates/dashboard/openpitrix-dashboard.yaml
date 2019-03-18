@@ -53,6 +53,8 @@ spec:
           value: v1
         - name: socketUrl
           value: ws://openpitrix-api-gateway:9100/v1/io
+        - name: socketProxyPort
+          value: "9300"
         - name: clientId
           valueFrom:
             secretKeyRef:
