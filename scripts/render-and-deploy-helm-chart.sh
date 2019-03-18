@@ -10,8 +10,8 @@ fi
 
 sed "s,VERSION,${VERSION},g" ./templates/values.json.tmpl > ./templates/values.json
 
-handlebars-renderer -i ./templates/values.yaml.handlebars -v ./templates/values.json -o ./openpitrix/values.yaml
-handlebars-renderer -i ./templates/Chart.yaml.handlebars -v ./templates/values.json -o ./openpitrix/Chart.yaml
+python handlebars-renderer.py -i ./templates/values.yaml.handlebars -v ./templates/values.json -o ./openpitrix/values.yaml
+python handlebars-renderer.py -i ./templates/Chart.yaml.handlebars -v ./templates/values.json -o ./openpitrix/Chart.yaml
 
 sudo helm install -n openpitrix openpitrix
 

@@ -2,12 +2,12 @@ namespace: openpitrix-system
 version: {{version}}
 
 image: openpitrix/openpitrix:{{version}}
-flyway_image: openpitrix/openpitrix:flyway{{#if (seq version "latest")}}{{else}}-{{version}}{{/if}}
+flyway_image: openpitrix/openpitrix:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
 iam2_image: openpitrix/iam:v0.2.8-dev
 dashboard_image: openpitrix/dashboard:latest
 watcher_image: openpitrix/watcher:latest
 
-image_pull_policy: {{#if (seq version "latest")}}Always{{else}}IfNotPresent{{/if}}
+image_pull_policy: {{#if (eq version "latest")}}Always{{else}}IfNotPresent{{/if}}
 openpitrix_log_level: info
 
 grpc_show_error_cause: true

@@ -2,7 +2,6 @@
 
 set -ev
 
-cd /opt
-git clone https://github.com/Hevienz/handlebars-renderer.git
-cd handlebars-renderer
-cargo install --path .
+# install handlerbars impl by python named pybars3
+# git@github.com:wbond/pybars3.git
+sudo pip install pybars3
