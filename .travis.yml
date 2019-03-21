@@ -1,10 +1,11 @@
 dist: xenial
 sudo: required
-env: PATH=/home/travis/.cargo/bin:$PATH
 services:
 - docker
-language: rust
-rust: nightly
+language: python
+python: 2.7
+virtualenv:
+  system_site_packages: true
 addons:
   apt:
     sources:
@@ -35,7 +36,7 @@ before_install:
 - sudo kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 - until sudo helm list -a; do sleep 1; done
 install:
-- "./scripts/install-handlebars-renderer.sh"
+- sudo pip install pybars3
 before_script:
 - "./scripts/render-and-deploy-helm-chart.sh"
 script:

@@ -24,7 +24,7 @@ spec:
       - name: wait-etcd
         image: busybox:1.28.4
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-etcd.{{ .Release.Namespace }}.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ .Values.etcd.host }}.{{ .Release.Namespace }}.svc {{ .Values.etcd.service_port }}; do echo "waiting for etcd"; sleep 2; done;']
       containers:
       - name: global-config-watcher
         image: {{ .Values.watcher_image }}
@@ -33,7 +33,7 @@ spec:
           - watcher
         env:
         - name: CONFIGOR_ETCDENDPOINT
-          value: "openpitrix-etcd.{{ .Release.Namespace }}.svc:2379"
+          value: "{{ .Values.etcd.host }}.{{ .Release.Namespace }}.svc:{{ .Values.etcd.service_port }}"
         resources:
           limits:
             cpu: {{ .Values.cpu_limits }}m

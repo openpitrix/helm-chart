@@ -41,11 +41,11 @@ spec:
       - name: wait-mysql
         image: busybox:1.28.4
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-db.{{ .Release.Namespace }}.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ .Values.mysql.host }}.{{ .Release.Namespace }}.svc {{ .Values.mysql.service_port }}; do echo "waiting for mysql"; sleep 2; done;']
       - name: wait-etcd
         image: busybox:1.28.4
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-etcd.{{ .Release.Namespace }}.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ .Values.etcd.host }}.{{ .Release.Namespace }}.svc {{ .Values.etcd.service_port }}; do echo "waiting for etcd"; sleep 2; done;']
       containers:
       - name: openpitrix-task-manager
         image: {{ .Values.image }}
