@@ -16,12 +16,16 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 8000
-    {{ .Values.dashboard_nodeport }}
+    {{ if .Values.dashboard_nodeport }}
+    nodePort: {{ .Values.dashboard_nodeport }}
+    {{ end }}
   - name: openpitrix-dashboard-websocket
       protocol: TCP
       port: {{ .Values.dashboard_websocket_port }}
       targetPort: {{ .Values.dashboard_websocket_port }}
-      {{ .Values.dashboard_websocket_nodeport }}
+      {{ if .Values.dashboard_websocket_nodeport }}
+      nodePort: {{ .Values.dashboard_websocket_nodeport }}
+      {{ end }}
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
