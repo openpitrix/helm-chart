@@ -19,13 +19,13 @@ spec:
     {{ if .Values.dashboard_nodeport }}
     nodePort: {{ .Values.dashboard_nodeport }}
     {{ end }}
-  - name: openpitrix-dashboard-websocket
-      protocol: TCP
-      port: {{ .Values.dashboard_websocket_port }}
-      targetPort: {{ .Values.dashboard_websocket_port }}
-      {{ if .Values.dashboard_websocket_nodeport }}
-      nodePort: {{ .Values.dashboard_websocket_nodeport }}
-      {{ end }}
+  - name: openpitrix-websocket
+    protocol: TCP
+    port: {{ .Values.websocket_port }}
+    targetPort: {{ .Values.websocket_port }}
+    {{ if .Values.websocket_nodeport }}
+    nodePort: {{ .Values.websocket_nodeport }}
+    {{ end }}
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -55,7 +55,7 @@ spec:
         ports:
         - containerPort: 8000
           name: dashboard
-        - containerPort: {{ .Values.dashboard_websocket_port }}
+        - containerPort: {{ .Values.websocket_port }}
           name: websocket
         env:
         - name: serverUrl
@@ -65,7 +65,7 @@ spec:
         - name: socketUrl
           value: ws://openpitrix-api-gateway:9100/v1/io
         - name: socketProxyPort
-          value: {{ .Values.dashboard_websocket_port | quote }}
+          value: {{ .Values.websocket_port | quote }}
         - name: clientId
           valueFrom:
             secretKeyRef:
