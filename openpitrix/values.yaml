@@ -20,6 +20,10 @@ api_nodeport: ""
 ## dashboard_nodeport: "DASHBOARD_NODEPORT=31010"
 dashboard_nodeport: ""
 
+## websocket_nodeport must be same as websocket_port
+websocket_port: 30300
+websocket_nodeport: 30300
+
 ## pilot_nodeport: "PILOT_NODEPORT=31011"
 pilot_nodeport: ""
 
