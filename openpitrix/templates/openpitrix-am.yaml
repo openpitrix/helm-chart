@@ -57,7 +57,7 @@ spec:
         - name: AM_IM_HOST
           value: "openpitrix-im-service"
         - name: AM_IM_PORT
-          value: {{ .Values.im.service_port | quote }}
+          value: "9119"
         - name: AM_LOG_LEVEL
           value: {{ .Values.openpitrix_log_level }}
         - name: AM_DB_HOST
