@@ -20,7 +20,9 @@ spec:
     protocol: TCP
     port: 9114
     targetPort: 9114
-    {{ .Values.pilot_nodeport }}
+    {{ if .Values.pilot_nodeport }}
+    nodePort: {{ .Values.pilot_nodeport }}
+    {{ end }}
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
