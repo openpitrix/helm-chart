@@ -42,6 +42,10 @@ spec:
         image: busybox:1.28.4
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c', 'until nc -z {{ .Values.etcd.host }}.{{ .Release.Namespace }}.svc {{ .Values.etcd.service_port }}; do echo "waiting for etcd"; sleep 2; done;']
+      - name: wait-runtime-manager
+        image: busybox:1.28.4
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-rp-manager.{{ .Release.Namespace }}.svc 9121; do echo "waiting for runtime-manager.."; sleep 2; done;']
       containers:
       - name: openpitrix-rp-kubernetes
         image: openpitrix/runtime-provider-kubernetes
