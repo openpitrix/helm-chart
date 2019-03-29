@@ -68,6 +68,7 @@ spec:
         - name: OPENPITRIX_GRPC_SHOW_ERROR_CAUSE
           value: {{ .Values.grpc_show_error_cause | quote }}
         - name: OPENPITRIX_LOG_LEVEL
+          value: {{ .Values.openpitrix_log_level }}
         resources:
           limits:
             cpu: {{ .Values.cpu_limits }}m
