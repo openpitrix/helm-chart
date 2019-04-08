@@ -46,8 +46,8 @@ mysql:
 iam_secret_key: lrsX5vk03JLNRBI9TnwOPZSNrxFIqvrxajs95MjZSmdsYCEYCPjSI4cLPjG2yT2jQLhKAOHS3lpwr4VyJwZz3ryCluIVb9Smsgq
 iam_client_id: JYGJTveVcmuAvV95iNUnKHgQ
 iam_client_secret: E3SVNXrZOWvsQ2eyrvs9u4nV
-iam_account: HYcida4bFrMP
 iam_init_account_email: admin@op.com
+iam_init_account_password: HYcida4bFrMP
 
 
 global_config:
