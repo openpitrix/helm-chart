@@ -30,9 +30,13 @@ spec:
         image: {{ .Values.watcher_image }}
         imagePullPolicy: {{ .Values.image_pull_policy }}
         command:
-          - watcher
+          - watch
         env:
-        - name: CONFIGOR_ETCDENDPOINT
+        - name: WATCHER_DURATION
+          value: 30
+        - name: WATCHER_LOG_LEVEL
+          value: {{ .Values.openpitrix_log_level }}
+        - name: WATCHER_ETCD_ENDPOINTS
           value: "{{ .Values.etcd.host }}.{{ .Release.Namespace }}.svc:{{ .Values.etcd.service_port }}"
         resources:
           limits:
