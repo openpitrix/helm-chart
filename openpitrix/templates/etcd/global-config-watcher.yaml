@@ -33,7 +33,7 @@ spec:
           - watch
         env:
         - name: WATCHER_DURATION
-          value: 30
+          value: "10"
         - name: WATCHER_LOG_LEVEL
           value: {{ .Values.openpitrix_log_level }}
         - name: WATCHER_ETCD_ENDPOINTS
