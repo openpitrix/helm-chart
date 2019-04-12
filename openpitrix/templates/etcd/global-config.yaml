@@ -39,3 +39,6 @@ data:
     pilot:
       ip: {{ .Values.global_config.pilot_ip }}
       port: {{ .Values.global_config.pilot_port }}
+    basic_config:
+      platform_name: OpenPitrix
+      platform_url: https://lab.openpitrix.io

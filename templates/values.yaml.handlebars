@@ -1,14 +1,11 @@
 namespace: openpitrix-system
 version: {{version}}
 
-image: openpitrix/openpitrix:{{version}}
-flyway_image: openpitrix/openpitrix:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
-dashboard_image: openpitrix/dashboard:latest
-watcher_image: openpitrix/watcher:latest
+image: {{IMAGE}}
+flyway_image: {{FLYWAY_IMAGE}}
 
 image_pull_policy: {{#if (eq version "latest")}}Always{{else}}IfNotPresent{{/if}}
 openpitrix_log_level: info
-
 grpc_show_error_cause: true
 
 ingress:
@@ -32,6 +29,25 @@ memory_requests: 100
 cpu_limits: 500
 memory_limits: 500
 
+iam_secret_key: {{iam_secret_key}}
+iam_client_id: {{iam_client_id}}
+iam_client_secret: {{iam_client_secret}}
+iam_init_account_email: {{iam_init_account_email}}
+iam_init_account_password: {{iam_init_account_password}}
+
+global_config:
+  pilot_ip: 127.0.0.1
+  pilot_port: 9114
+  default_draft_status: true
+  frontgate_auto_delete: true
+  frontgate_auto_update: true
+  max_repo_events: 20
+  ignore_keys: '{"runtime": true, "cluster": {"registry_mirror": true}}'
+
+dashboard:
+  version: {{DASHBOARD_VERSION}}
+  image: {{DASHBOARD_IMAGE}}
+
 etcd:
   host: openpitrix-etcd
   service_port: 2379
@@ -43,40 +59,37 @@ mysql:
   service_port: 3306
   backend_port: 3306
 
-iam_secret_key: {{iam_secret_key}}
-iam_client_id: {{iam_client_id}}
-iam_client_secret: {{iam_client_secret}}
-iam_init_account_email: {{iam_init_account_email}}
-iam_init_account_password: {{iam_init_account_password}}
-
-
-global_config:
-  pilot_ip: 127.0.0.1
-  pilot_port: 9114
-  default_draft_status: true
-  frontgate_auto_delete: true
-  frontgate_auto_update: true
-  max_repo_events: 20
-
-
 notification:
-  version: {{version}}
-  image: openpitrix/notification:{{version}}
-  flyway_image: openpitrix/notification:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
-
+  version: {{NOTIFICATION_VERSION}}
+  image: {{NOTIFICATION_IMAGE}}
+  flyway_image: {{NOTIFICATION_FLYWAY_IMAGE}}
 
 im:
-  version: {{version}}
-  image: kubespheredev/im:{{version}}
-  flyway_image: kubespheredev/im:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
+  version: {{IM_VERSION}}
+  image: {{IM_IMAGE}}
+  flyway_image: {{IM_FLYWAY_IMAGE}}
   db_log_mode_enable: true
-
 
 am:
-  version: {{version}}
-  image: openpitrix/iam:{{version}}
-  flyway_image: openpitrix/iam:flyway{{#if (eq version "latest")}}{{else}}-{{version}}{{/if}}
+  version: {{AM_VERSION}}
+  image: {{AM_IMAGE}}
+  flyway_image: {{AM_FLYWAY_IMAGE}}
   db_log_mode_enable: true
+
+#runtime_provider
+rp:
+  qingcloud_version: {{RP_QINGCLOUD_VERSION}}
+  qingcloud_image: {{RP_QINGCLOUD_IMAGE}}
+  aws_version: {{RP_AWS_VERSION}}
+  aws_image: {{RP_AWS_IMAGE}}
+  aliyun_version: {{RP_ALIYUN_VERSION}}
+  aliyun_image: {{RP_ALIYUN_IMAGE}}
+  k8s_version: {{RP_K8S_VERSION}}
+  k8s_image: {{RP_K8S_IMAGE}}
+
+watcher:
+  version: {{WATCHER_VERSION}}
+  image: {{WATCHER_IMAGE}}
 
 
 openpitrix_ca_crt: |-

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-rp-kubernetes
-    version: {{ .Values.version }}
+    version: {{ .Values.rp.k8s_version }}
 spec:
   selector:
     app: openpitrix
@@ -23,7 +23,7 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-rp-kubernetes
-    version: {{ .Values.version }}
+    version: {{ .Values.rp.k8s_version }}
 spec:
   selector:
     matchLabels:
@@ -35,7 +35,7 @@ spec:
       labels:
         app: openpitrix
         component: openpitrix-rp-kubernetes
-        version: {{ .Values.version }}
+        version: {{ .Values.rp.k8s_version }}
     spec:
       initContainers:
       - name: wait-etcd
@@ -48,7 +48,7 @@ spec:
         command: ['sh', '-c', 'until nc -z openpitrix-rp-manager.{{ .Release.Namespace }}.svc 9121; do echo "waiting for runtime-manager.."; sleep 2; done;']
       containers:
       - name: openpitrix-rp-kubernetes
-        image: openpitrix/runtime-provider-kubernetes
+        image: {{ .Values.rp.k8s_image }}
         imagePullPolicy: {{ .Values.image_pull_policy }}
         command:
           - runtime-provider

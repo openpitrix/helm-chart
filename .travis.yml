@@ -17,38 +17,24 @@ addons:
     - golang-go
     - socat
 before_install:
-- curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl
-  && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-- curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.2/minikube-linux-amd64
-  && chmod +x minikube && sudo mv minikube /usr/local/bin/
-- sudo minikube start --vm-driver=none --kubernetes-version=v1.10.0 --extra-config=apiserver.Authorization.Mode=RBAC
-- sudo minikube update-context
-- sudo kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
-- JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}';
-  until sudo kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True";
-  do sleep 1; done
-- DESIRED_VERSION=2.9.1 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get
-  | DESIRED_VERSION=v2.9.1 bash
-- sudo helm init --tiller-image=gcr.io/kubernetes-helm/tiller:v2.9.1 --upgrade
-- sudo kubectl create serviceaccount --namespace kube-system tiller
-- sudo kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin
-  --serviceaccount=kube-system:tiller
-- sudo kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
-- until sudo helm list -a; do sleep 1; done
+- curl -Lo https://raw.githubusercontent.com/yudong2015/openpitrix/k8s_deploy_dev_20190412/deploy/kubernetes/scripts/install-minikube.sh
+- sh install-minikube.sh
+- curl -Lo https://raw.githubusercontent.com/yudong2015/openpitrix/k8s_deploy_dev_20190412/deploy/kubernetes/scripts/init-helm.sh
+- sh init-helm.sh
 install:
 - sudo pip install pybars3
 before_script:
-- "./scripts/render-and-deploy-helm-chart.sh"
+- ./scripts/render-and-deploy-helm-chart.sh
 script:
 - travis_wait 20 ./scripts/test-openpitrix.sh
 before_deploy:
-- tar zcvf openpitrix-$TRAVIS_TAG.tar.gz openpitrix
+- tar zcvf openpitrix-helm-chart-$TRAVIS_TAG.tar.gz openpitrix
 deploy:
   overwrite: true
   provider: releases
   api_key:
-    secure: AOYTxcKQtJBBZGhvIuPS1I8T5E+zWTTWMevUSxemshBF6IOjfJo6dXT4TgnVTUj9nrD5a1/2kEpVewW09h1QwilAbhzxS05Z65UooIL+Ee1D46FDlT/68qZOcnb9Q5SBcidAeRxyoy+cNgi82S6MQs+rjwTQ3Kz6Qn4cGIsvRBdYAK8yMGH7HtWYrHUT66j400VzcQxlhTSCfDFChAzFveEBkCRHL5kGIYj5NEofw5inr0AXbY3PrQxCfQVz7hgtiuCgvp/XhSs8bkJek5s8HrS3quCHVSqZBRaSQ/+yLrar31Ni8VcOPFbyFlJhoLc9ZWtOyQRNwG9sPXUDLEyGKpNHis0qSwOFyqXl5TX9dkONWVHNg4l6tPikE+rWa2nLtT13ho/BxofU8MF+UlyCE9839Kzky+IhLyK+7Ca5L3JCXczyyqIVt64FBzBcomhxxb3BGwYyYvUelEkwk4hShfbOOV9JNq1oYiNXIg0j2IcEmUKd8nT3OTk5GAK7a4DvLph8WIv+Tq879fvbtoNkxPQVuvuUtHwnfqbLiU8OQQkfuaEbcEd3EVGR6voOtwkwmOzS4qAohb79/xV/vjX4vCk++yd3RO/PN7W2h1fmN+UJ8711sqzajJD2yNHETK/CTsC0woZmokmmgOWAi0SbAeMEbYyfOz27AWRAmvmpuBA=
-  file: openpitrix-$TRAVIS_TAG.tar.gz
+    secure: k6pBb0kP99Sb0ZmJjncWZNugdUpT90dwWmvnlG4j8t+U61QarfgarR1RdDi8fYLKdioIOwfduH3SU5iq1Xtc4qV62f1J0mXvoRalcEhCeh16edaBxSIs1akUNirNjAvosKURcqmVpUXo+iRFhSI2708J2XBl8sogAqnuuW49LbcrsY7K4DrFFujjysBeSZDaRxPU8nMFykHNSrbEQgw2u/YK6PI0jg73RDhAfnr6cPfZr0ZJDr0ykLrra6faZLANR9khXKaTCN5JT3enI6ufd4bAY0WvjM6XeNLU9vWGeB5QbJErvLlkANrrtkCA6mRDVh6kUxkEM0R1VirGR4XJMk+kVdCzgJV4bpmQSzFhHVbr0g2+4hqeAvNrbVjGq6z9orbv//Lkg7IXhu21u/wcgSAzBWHZdMpoaAVPvySJSVAIhdCgJD5Q3Ebh7L3olLnQ0MWWf95Mz21jTaH0F76pe3Kcu/p3ATSsomZQL9ez+W1A0P+3Bxcjk4fjqjQDkrwBqxo4wTb0Oix66eZFJtwPWKqu0erzuViprSDi6+vwPydjt9ADxMWescFc53sfFPkQWzVC6Pfbxdqt4jCcgRBPipzchsbxHYaofKzfMJrJYIx67iR5Ai9Z8Nwwki6rGXocuR06uhuIyyN4j0yR6Y9qiCslvLUbptsU69WDkMlsOwI=
+  file: openpitrix-helm-chart-$TRAVIS_TAG.tar.gz
   skip_cleanup: true
   on:
     repo: openpitrix/helm-chart
