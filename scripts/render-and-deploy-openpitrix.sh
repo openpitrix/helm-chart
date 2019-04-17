@@ -1,14 +1,15 @@
 #!/bin/bash
 
 if [ -z "${TRAVIS_TAG}" ]; then
-    CHART_VERSION="latest"
-    TRAVIS_TAG="master"
+  CHART_VERSION="latest"
+  TRAVIS_TAG="master"
 else
-    CHART_VERSION=${TRAVIS_TAG}
+  CHART_VERSION=${TRAVIS_TAG}
 fi
 
+echo ${CHART_VERSION}
 # get appVersion(openpitrix version) by CHART_VERSION(helm chart version)
-VERSIONS=`sh ./scripts/chart-openpitrix-version.sh ${CHART_VERSION}`
+VERSIONS=`bash ./scripts/chart-openpitrix-version.sh ${CHART_VERSION}`
 if [ $? -eq 0 ]; then
   export ${VERSIONS}
 else
@@ -18,8 +19,8 @@ else
 fi
 
 #get versions and images from version.sh
-#curl -O https://raw.githubusercontent.com/openpitrix/openpitrix/${TRAVIS_TAG}/deploy/version.sh
-OP_VERSIONS_IMAGES=`sh version.sh openpitrix-${appVersion}`
+curl -O https://raw.githubusercontent.com/openpitrix/openpitrix/${TRAVIS_TAG}/deploy/version.sh
+OP_VERSIONS_IMAGES=`bash version.sh openpitrix-${appVersion}`
 if [ $? -eq 0 ]; then
   export ${OP_VERSIONS_IMAGES}
 else
@@ -34,4 +35,12 @@ python ./scripts/handlebars-renderer.py -i ./templates/Chart.yaml.handlebars -v 
 
 sudo helm install -n openpitrix openpitrix
 
-until sudo helm list --deployed openpitrix | grep -w openpitrix; do sleep 1; done
+until sudo helm list --deployed openpitrix | grep -w openpitrix; do sleep 3; done
+echo "Check status of openpitrix deployments..."
+TIMES=0
+while [ $(sudo kubectl get deployments --no-headers | awk '{print $4}'|grep 0|wc -l) -gt 0 ]&&[ ${TIMES} -lt 100 ];do
+  TIMES=`expr ${TIMES} + 1`
+  echo "Retry ${TIMES} times..."
+  sleep 6
+done
+sudo kubectl get deployments

@@ -1,32 +1,48 @@
 dist: xenial
 sudo: required
+env:
+  global:
+  - CHANGE_MINIKUBE_NONE_USER=true
+  - cpu_requests=10
+  - memory_requests=20
+  - cpu_limits=100
+  - memory_limits=100
+cache:
+  directories:
+  - tmp/cache
 services:
 - docker
-language: python
-python: 2.7
+language: go
+go:
+- "1.11"
+go_import_path: openpitrix.io/openpitrix
 virtualenv:
   system_site_packages: true
 addons:
   apt:
     sources:
     - sourceline: deb http://ppa.launchpad.net/longsleep/golang-backports/ubuntu xenial
-        main
+          main
       key_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF6BC817356A3D45E
     packages:
     - docker-ce
-    - golang-go
     - socat
+    - ebtables
 before_install:
-- curl -Lo https://raw.githubusercontent.com/yudong2015/openpitrix/k8s_deploy_dev_20190412/deploy/kubernetes/scripts/install-minikube.sh
-- sh install-minikube.sh
-- curl -Lo https://raw.githubusercontent.com/yudong2015/openpitrix/k8s_deploy_dev_20190412/deploy/kubernetes/scripts/init-helm.sh
-- sh init-helm.sh
+- sudo docker version
+- sudo systemctl restart docker
+- sudo docker run -d -it --name nsenter ubuntu:16.04 bash && sudo docker cp nsenter:/usr/bin/nsenter /usr/local/bin/nsenter && sudo docker rm -f nsenter
+- curl -Lo ./scripts/install-minikube.sh https://raw.githubusercontent.com/yudong2015/openpitrix/tmp/deploy/kubernetes/scripts/install-minikube.sh
+- bash ./scripts/install-minikube.sh
+- curl -Lo ./scripts/init-helm.sh https://raw.githubusercontent.com/yudong2015/openpitrix/tmp/deploy/kubernetes/scripts/init-helm.sh
+- bash ./scripts/init-helm.sh
 install:
+- sudo apt-get install python-pip
 - sudo pip install pybars3
 before_script:
-- ./scripts/render-and-deploy-helm-chart.sh
+- ./scripts/render-and-deploy-openpitrix.sh
 script:
-- travis_wait 20 ./scripts/test-openpitrix.sh
+- ./scripts/test-openpitrix.sh
 before_deploy:
 - tar zcvf openpitrix-helm-chart-$TRAVIS_TAG.tar.gz openpitrix
 deploy:

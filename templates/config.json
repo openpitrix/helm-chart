@@ -3,5 +3,9 @@
   "iam_secret_key": "lrsX5vk03JLNRBI9TnwOPZSNrxFIqvrxajs95MjZSmdsYCEYCPjSI4cLPjG2yT2jQLhKAOHS3lpwr4VyJwZz3ryCluIVb9Smsgq",
   "iam_client_secret": "E3SVNXrZOWvsQ2eyrvs9u4nV",
   "iam_init_account_email": "admin@op.com",
-  "iam_init_account_password": "HYcida4bFrMP"
+  "iam_init_account_password": "passw0rd",
+  "cpu_requests": 100,
+  "memory_requests": 100,
+  "cpu_limits": 500,
+  "memory_limits": 500
 }

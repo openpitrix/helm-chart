@@ -24,10 +24,10 @@ websocket_nodeport: 30300
 ## pilot_nodeport: "PILOT_NODEPORT=31011"
 pilot_nodeport: ""
 
-cpu_requests: 100
-memory_requests: 100
-cpu_limits: 500
-memory_limits: 500
+cpu_requests: {{cpu_requests}}
+memory_requests: {{memory_requests}}
+cpu_limits: {{cpu_limits}}
+memory_limits: {{memory_limits}}
 
 iam_secret_key: {{iam_secret_key}}
 iam_client_id: {{iam_client_id}}

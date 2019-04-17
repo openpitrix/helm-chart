@@ -20,8 +20,7 @@ def render(input_file, value_file, output_file, enable_env):
         values = json.load(valueF)
     if enable_env:
         for k, v in os.environ.iteritems():
-            if k not in values:
-                values[k] = v
+            values[k] = v
 
     compiler = Compiler()
     template = compiler.compile(source)
