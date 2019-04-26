@@ -31,7 +31,7 @@ else
   mkdir -p ${GOPATH}/src/openpitrix.io
 fi
 cd ${GOPATH}/src/openpitrix.io
-git clone https://github.com/openpitrix/openpitrix.git
+git clone -b tmp https://github.com/yudong2015/openpitrix.git
 cd openpitrix
 
 sudo chown -R ${USER}:${USER} ${HOME}/.kube
@@ -40,9 +40,5 @@ sudo chown -R ${USER}:${USER} ${HOME}/.minikube
 # ignored files that don't need to be tested here
 rm -rf ./test/devkit
 
-go test -a -tags="integration" ./test/...
-echo "e2e-test done."
-
-go test -a -timeout 0 -tags="k8s" ./test/...
-echo "e2e-k8s-test done."
-
+make e2e-test
+make e2e-k8s-test
