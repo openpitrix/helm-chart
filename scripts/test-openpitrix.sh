@@ -17,11 +17,13 @@ getValueFromJsonFile() {
 # generate openpitrix config.json
 CLIENT_ID=$(getValueFromJsonFile "iam_client_id")
 CLIENT_SECRET_KEY=$(getValueFromJsonFile "iam_client_secret")
-API_GATEWAY_NODEPORT=$(sudo kubectl get svc openpitrix-api-gateway -o jsonpath='{.spec.ports[0].nodePort}')
+IP=$(minikube ip)
+API_GATEWAY_NODEPORT=$(kubectl get svc openpitrix-api-gateway -o jsonpath='{.spec.ports[0].nodePort}')
 
 mkdir -p ~/.openpitrix/
 sed -e "s,{{CLIENT_ID}},${CLIENT_ID},g" \
     -e "s,{{CLIENT_SECRET_KEY}},${CLIENT_SECRET_KEY},g" \
+    -e "s,{{ENDPOINT}},${IP},g" \
     -e "s,{{API_GATEWAY_NODEPORT}},${API_GATEWAY_NODEPORT},g" ./templates/openpitrix-config.json.tmpl > ~/.openpitrix/config.json
 
 # download openpitrix code
@@ -33,9 +35,6 @@ fi
 cd ${GOPATH}/src/openpitrix.io
 git clone -b tmp https://github.com/yudong2015/openpitrix.git
 cd openpitrix
-
-sudo chown -R ${USER}:${USER} ${HOME}/.kube
-sudo chown -R ${USER}:${USER} ${HOME}/.minikube
 
 # ignored files that don't need to be tested here
 rm -rf ./test/devkit
