@@ -11,7 +11,6 @@ services:
 language: go
 go:
 - "1.11"
-go_import_path: openpitrix.io/openpitrix
 virtualenv:
   system_site_packages: true
 addons:
@@ -39,7 +38,7 @@ script:
 - ./scripts/test-openpitrix.sh
 before_deploy:
 - ./scripts/generate-values.sh
-- tar zcvf openpitrix-helm-chart-$TRAVIS_TAG.tar.gz openpitrix
+- tar -zcvf openpitrix-helm-chart-$TRAVIS_TAG.tar.gz openpitrix
 deploy:
   overwrite: true
   provider: releases

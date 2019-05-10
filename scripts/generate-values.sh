@@ -7,14 +7,8 @@ if [ "$1" == "-t" ]; then
   export memory_requests=20
 fi
 
-if [ -z "${TRAVIS_TAG}" ]; then
-  CHART_VERSION="latest"
-else
-  CHART_VERSION=${TRAVIS_TAG}
-fi
-
-# get appVersion(openpitrix version) by CHART_VERSION(helm chart version)
-VERSIONS=`bash ./scripts/chart-openpitrix-version.sh ${CHART_VERSION}`
+# get appVersion(openpitrix version) and version.sh
+VERSIONS=`bash ./scripts/chart-openpitrix-version.sh`
 if [ $? -eq 0 ]; then
   export ${VERSIONS}
 else
@@ -23,13 +17,14 @@ else
   exit 1
 fi
 
-# get versions and images from version.sh
-if [ ${CHART_VERSION} == "latest" ];then
+if [ -z "${TRAVIS_TAG}" ];then
   BRANCH="master"
 else
   BRANCH=${appVersion}
 fi
 curl -O https://raw.githubusercontent.com/openpitrix/openpitrix/${BRANCH}/deploy/version.sh
+
+# get versions and images from version.sh
 OP_VERSIONS_IMAGES=`bash version.sh openpitrix-${appVersion}`
 if [ $? -eq 0 ]; then
   export ${OP_VERSIONS_IMAGES}
