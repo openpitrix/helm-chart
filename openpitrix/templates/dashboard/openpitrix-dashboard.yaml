@@ -5,7 +5,7 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-dashboard
-    version: {{ .Values.version }}
+    version: {{ .Values.dashboard.version }}
 spec:
   type: NodePort
   selector:
@@ -34,7 +34,7 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-dashboard
-    version: {{ .Values.version }}
+    version: {{ .Values.dashboard.version }}
 spec:
   selector:
     matchLabels:
@@ -46,11 +46,11 @@ spec:
       labels:
         app: openpitrix
         component: openpitrix-dashboard
-        version: {{ .Values.version }}
+        version: {{ .Values.dashboard.version }}
     spec:
       containers:
       - name: openpitrix-dashboard
-        image: {{ .Values.dashboard_image }}
+        image: {{ .Values.dashboard.image }}
         imagePullPolicy: {{ .Values.image_pull_policy }}
         ports:
         - containerPort: 8000

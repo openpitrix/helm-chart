@@ -3,12 +3,9 @@ version: latest
 
 image: openpitrix/openpitrix:latest
 flyway_image: openpitrix/openpitrix:flyway
-dashboard_image: openpitrix/dashboard:latest
-watcher_image: openpitrix/watcher:latest
 
 image_pull_policy: Always
 openpitrix_log_level: info
-
 grpc_show_error_cause: true
 
 ingress:
@@ -32,6 +29,25 @@ memory_requests: 100
 cpu_limits: 500
 memory_limits: 500
 
+iam_secret_key: lrsX5vk03JLNRBI9TnwOPZSNrxFIqvrxajs95MjZSmdsYCEYCPjSI4cLPjG2yT2jQLhKAOHS3lpwr4VyJwZz3ryCluIVb9Smsgq
+iam_client_id: JYGJTveVcmuAvV95iNUnKHgQ
+iam_client_secret: E3SVNXrZOWvsQ2eyrvs9u4nV
+iam_init_account_email: admin@op.com
+iam_init_account_password: HYcida4bFrMP
+
+global_config:
+  pilot_ip: 127.0.0.1
+  pilot_port: 9114
+  default_draft_status: true
+  frontgate_auto_delete: true
+  frontgate_auto_update: true
+  max_repo_events: 20
+  ignore_keys: '{"runtime": true, "cluster": {"registry_mirror": true}}'
+
+dashboard:
+  version: 
+  image: openpitrix/dashboard:latest
+
 etcd:
   host: openpitrix-etcd
   service_port: 2379
@@ -43,40 +59,37 @@ mysql:
   service_port: 3306
   backend_port: 3306
 
-iam_secret_key: lrsX5vk03JLNRBI9TnwOPZSNrxFIqvrxajs95MjZSmdsYCEYCPjSI4cLPjG2yT2jQLhKAOHS3lpwr4VyJwZz3ryCluIVb9Smsgq
-iam_client_id: JYGJTveVcmuAvV95iNUnKHgQ
-iam_client_secret: E3SVNXrZOWvsQ2eyrvs9u4nV
-iam_account: HYcida4bFrMP
-iam_init_account_email: admin@op.com
-
-
-global_config:
-  pilot_ip: 127.0.0.1
-  pilot_port: 9114
-  default_draft_status: true
-  frontgate_auto_delete: true
-  frontgate_auto_update: true
-  max_repo_events: 20
-
-
 notification:
-  version: latest
+  version: 
   image: openpitrix/notification:latest
   flyway_image: openpitrix/notification:flyway
 
-
 im:
-  version: latest
+  version: 
   image: kubespheredev/im:latest
   flyway_image: kubespheredev/im:flyway
   db_log_mode_enable: true
 
-
 am:
-  version: latest
+  version: 
   image: openpitrix/iam:latest
   flyway_image: openpitrix/iam:flyway
   db_log_mode_enable: true
+
+#runtime_provider
+rp:
+  qingcloud_version: 
+  qingcloud_image: openpitrix/runtime-provider-qingcloud:latest
+  aws_version: 
+  aws_image: openpitrix/runtime-provider-aws:latest
+  aliyun_version: 
+  aliyun_image: openpitrix/runtime-provider-aliyun:latest
+  k8s_version: 
+  k8s_image: openpitrix/runtime-provider-kubernetes:latest
+
+watcher:
+  version: 
+  image: 
 
 
 openpitrix_ca_crt: |-
