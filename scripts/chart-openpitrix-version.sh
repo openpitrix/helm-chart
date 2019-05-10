@@ -7,7 +7,7 @@ chart_latest="
 
 chart_v0_4_0="
   version=v0.4.0
-  appVersion=v0.4.0
+  appVersion=v0.4.1
 "
 
 VERSION=$1

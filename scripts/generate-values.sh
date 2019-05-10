@@ -9,12 +9,10 @@ fi
 
 if [ -z "${TRAVIS_TAG}" ]; then
   CHART_VERSION="latest"
-  TRAVIS_TAG="master"
 else
   CHART_VERSION=${TRAVIS_TAG}
 fi
 
-echo ${CHART_VERSION}
 # get appVersion(openpitrix version) by CHART_VERSION(helm chart version)
 VERSIONS=`bash ./scripts/chart-openpitrix-version.sh ${CHART_VERSION}`
 if [ $? -eq 0 ]; then
@@ -26,7 +24,12 @@ else
 fi
 
 # get versions and images from version.sh
-curl -O https://raw.githubusercontent.com/openpitrix/openpitrix/${TRAVIS_TAG}/deploy/version.sh
+if [ ${CHART_VERSION} == "latest" ];then
+  BRANCH="master"
+else
+  BRANCH=${appVersion}
+fi
+curl -O https://raw.githubusercontent.com/openpitrix/openpitrix/${BRANCH}/deploy/version.sh
 OP_VERSIONS_IMAGES=`bash version.sh openpitrix-${appVersion}`
 if [ $? -eq 0 ]; then
   export ${OP_VERSIONS_IMAGES}

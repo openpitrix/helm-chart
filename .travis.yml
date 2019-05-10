@@ -26,9 +26,9 @@ addons:
     - ebtables
 before_install:
 - sudo docker run -d -it --name nsenter ubuntu:16.04 bash && sudo docker cp nsenter:/usr/bin/nsenter /usr/local/bin/nsenter && sudo docker rm -f nsenter
-- curl -Lo ./scripts/install-minikube.sh https://raw.githubusercontent.com/yudong2015/openpitrix/tmp/deploy/kubernetes/scripts/install-minikube.sh
+- curl -Lo ./scripts/install-minikube.sh https://raw.githubusercontent.com/openpitrix/openpitrix/v0.4.1/deploy/kubernetes/scripts/install-minikube.sh
 - bash ./scripts/install-minikube.sh
-- curl -Lo ./scripts/init-helm.sh https://raw.githubusercontent.com/yudong2015/openpitrix/tmp/deploy/kubernetes/scripts/init-helm.sh
+- curl -Lo ./scripts/init-helm.sh https://raw.githubusercontent.com/openpitrix/openpitrix/v0.4.1/deploy/kubernetes/scripts/init-helm.sh
 - bash ./scripts/init-helm.sh
 install:
 - sudo apt-get install -y python-pip
