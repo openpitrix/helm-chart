@@ -20,7 +20,7 @@ spec:
     nodePort: {{ .Values.api_nodeport }}
     {{ end }}
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-api-gateway-deployment
