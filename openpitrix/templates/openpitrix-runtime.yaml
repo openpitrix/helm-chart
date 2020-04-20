@@ -16,7 +16,7 @@ spec:
     port: 9103
     targetPort: 9103
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-runtime-manager-deployment

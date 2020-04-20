@@ -16,7 +16,7 @@ spec:
     port: 9120
     targetPort: 9120
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-attachment-manager-deployment

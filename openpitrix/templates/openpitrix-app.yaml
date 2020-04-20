@@ -16,7 +16,7 @@ spec:
     port: 9102
     targetPort: 9102
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-app-manager-deployment
@@ -93,7 +93,7 @@ spec:
     port: 9113
     targetPort: 9113
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-category-manager-deployment

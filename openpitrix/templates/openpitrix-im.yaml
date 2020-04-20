@@ -16,7 +16,7 @@ spec:
     port: 9119
     targetPort: 9119
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: openpitrix-im-service-deployment
